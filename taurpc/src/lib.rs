@@ -2,7 +2,7 @@
 //! TauRPC should be used instead of [Tauri's IPC system](https://v2.tauri.app/develop/calling-rust),
 //! which does not provide TypeScript types for your commands or events.
 //!
-//! Go the the [GitHub](https://github.com/MatsDK/TauRPC/#readme) page to get started.
+//! Go to the [GitHub](https://github.com/MatsDK/TauRPC/#readme) page to get started.
 
 pub extern crate serde;
 pub extern crate specta;
@@ -50,7 +50,7 @@ pub trait TauRpcHandler<R: Runtime>: Sized {
     fn collect_fn_types(type_map: &mut TypeCollection) -> Vec<Function>;
 }
 
-/// Creates a handler that allows your IPCs to be called from the frontend with the coresponding
+/// Creates a handler that allows your IPCs to be called from the frontend with the corresponding
 /// types. Accepts a struct in which your `taurpc::procedures` trait is implemented.
 /// If you have nested routes, look at [taurpc::Router](https://docs.rs/taurpc/latest/taurpc/struct.Router.html).
 ///
@@ -118,7 +118,7 @@ struct Event<S> {
 }
 
 /// A structure used for triggering [tauri events](https://v2.tauri.app/develop/calling-rust/#accessing-the-webviewwindow-in-commands) on the frontend.
-/// By default the events are send to all windows with `emit_all`, if you want to send to a specific window by label,
+/// By default, the events are send to all windows with `emit_all`, if you want to send to a specific window by label,
 /// use `new_scoped` or `new_scoped_from_trigger`.
 #[derive(Debug)]
 pub struct EventTrigger<RT: Runtime> {

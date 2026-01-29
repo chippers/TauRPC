@@ -31,6 +31,9 @@ specta-macros = { version = "2.0.0-rc.18" }
 heck = "0.5"
 anyhow = "1"
 
+[dev-dependencies]
+tauri = { version = "2", features = ["specta", "test"] }
+
 [workspace]
 resolver = "3"
 members = [

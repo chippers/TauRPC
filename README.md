@@ -77,7 +77,7 @@ You can find a complete example (using Svelte) [here](https://github.com/fltsci/
 
 # Using structs
 
-If you want to use structs for the inputs/outputs of procedures, you should always add `#[taurpc::ipc_type]` to make sure the coresponding ts types are generated. This make will derive serde `Serialize` and `Deserialize`, `Clone` and `specta::Type`.
+If you want to use structs for the inputs/outputs of procedures, you should always add `#[taurpc::ipc_type]` to make sure the corresponding ts types are generated. This make will derive serde `Serialize` and `Deserialize`, `Clone` and `specta::Type`.
 
 ```rust
 #[taurpc::ipc_type]
@@ -150,7 +150,7 @@ async fn main() {
 
 # Custom error handling
 
-You can return a `Result<T, E>` to return an error if the procedure fails. This is will reject the promise on the frontend and throw an error.
+You can return a `Result<T, E>` to return an error if the procedure fails. This will reject the promise on the frontend and throw an error.
 If you're working with error types from Rust's std library, they will probably not implement `serde::Serialize` which is required for anything that is returned in the procedure.
 In simple scenarios you can use `map_err` to convert these errors to `String`s. For more complex scenarios, you can create your own error type that implements `serde::Serialize`.
 You can find an example using [thiserror](https://github.com/dtolnay/thiserror) [here](https://github.com/fltsci/TauRPC/blob/main/example/src-tauri/src/main.rs).

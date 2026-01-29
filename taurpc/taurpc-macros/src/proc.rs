@@ -1,10 +1,11 @@
 use super::extend_errors;
 use syn::{
-    Attribute, FnArg, Generics, Ident, Pat, ReturnType, Token, Visibility, braced,
+    braced,
     ext::IdentExt,
     parenthesized,
     parse::{self, Parse, ParseStream},
     spanned::Spanned,
+    Attribute, FnArg, Generics, Ident, Pat, ReturnType, Token, Visibility,
 };
 
 use crate::{args::Arg, attrs::MethodAttrs};
@@ -18,7 +19,7 @@ pub struct Procedures {
     pub attrs: Vec<Attribute>,
 }
 
-/// Parse the structure of the methods insdie the procedures trait tagged with `#[taurpc::procedures]`.
+/// Parse the structure of the methods inside the procedures trait tagged with `#[taurpc::procedures]`.
 /// These methods can have generics and also have attributes e.g.: `#[taurpc(skip, alias = "...")]`.
 pub struct IpcMethod {
     pub ident: Ident,

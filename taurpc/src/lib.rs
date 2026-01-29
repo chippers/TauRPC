@@ -2,12 +2,12 @@
 //! TauRPC should be used instead of [Tauri's IPC system](https://v2.tauri.app/develop/calling-rust),
 //! which does not provide TypeScript types for your commands or events.
 //!
-//! Go the the [GitHub](https://github.com/fltsci/TauRPC/#readme) page to get started.
+//! Go to the [GitHub](https://github.com/fltsci/TauRPC/#readme) page to get started.
 
 pub extern crate serde;
 pub extern crate specta;
-use specta::TypeCollection;
 use specta::datatype::Function;
+use specta::TypeCollection;
 pub use specta_typescript::Typescript;
 
 use std::collections::{BTreeMap, HashMap};
@@ -48,13 +48,14 @@ pub trait TauRpcHandler<R: Runtime>: Sized {
     fn collect_fn_types(type_map: &mut TypeCollection) -> Vec<Function>;
 }
 
-/// Creates a handler that allows your IPCs to be called from the frontend with the coresponding
+/// Creates a handler that allows your IPCs to be called from the frontend with the corresponding
 /// types. Accepts a struct in which your `taurpc::procedures` trait is implemented.
 /// If you have nested routes, look at [taurpc::Router](https://docs.rs/taurpc/latest/taurpc/struct.Router.html).
 ///
 ///
 ///  # Examples
-/// ```rust
+/// ```no_run
+/// # use tauri::{generate_context, Context, Wry};
 /// #[taurpc::procedures]
 /// trait Api {
 ///     async fn hello_world();
@@ -71,11 +72,10 @@ pub trait TauRpcHandler<R: Runtime>: Sized {
 ///
 /// #[tokio::main]
 /// async fn main() {
+///   # let context: Context<Wry> = generate_context!("../example/src-tauri/tauri.conf.json", test = true);
 ///   tauri::Builder::default()
-///     .invoke_handler(
-///       taurpc::create_ipc_handler(ApiImpl.into_handler());
-///     )
-///     .run(tauri::generate_context!())
+///     .invoke_handler(taurpc::create_ipc_handler(ApiImpl.into_handler()))
+///     .run(context) // tauri::generate_context!()
 ///     .expect("error while running tauri application");
 /// }
 /// ```
@@ -123,7 +123,7 @@ struct Event<S> {
 }
 
 /// A structure used for triggering [tauri events](https://v2.tauri.app/develop/calling-rust/#accessing-the-webviewwindow-in-commands) on the frontend.
-/// By default the events are send to all windows with `emit_all`, if you want to send to a specific window by label,
+/// By default, the events are sent to all windows with `emit_all`, if you want to send to a specific window by label,
 /// use `new_scoped` or `new_scoped_from_trigger`.
 #[derive(Debug)]
 pub struct EventTrigger<RT: Runtime> {
@@ -187,17 +187,20 @@ impl<RT: Runtime> EventTrigger<RT> {
 
 /// Used for merging nested trait implementations. This is used when you have multiple trait implementations,
 /// instead of `taurpc::create_ipc_handler()`. Use `.merge()` to add trait implementations to the router.
-/// The trait must have the `#[taurpc::procedures]` macro and the nested routes should have `#[taurpc::procedures(path = "path")]`.
+/// The trait must have the `#[taurpc::procedures]` macro, and the nested routes should have `#[taurpc::procedures(path = "path")]`.
 ///
 ///  # Examples
-/// ```rust
+/// ```no_run
+/// # use taurpc::Router;
+/// # use tauri::{generate_context, Context, Wry};
+/// #
 /// #[taurpc::procedures]
 /// trait Api { }
 ///
 /// #[derive(Clone)]
 /// struct ApiImpl;
 ///
-/// #[taurpc::resolveres]
+/// #[taurpc::resolvers]
 /// impl Api for ApiImpl { }
 ///
 /// #[taurpc::procedures(path = "events")]
@@ -206,18 +209,19 @@ impl<RT: Runtime> EventTrigger<RT> {
 /// #[derive(Clone)]
 /// struct EventsImpl;
 ///
-/// #[taurpc::resolveres]
+/// #[taurpc::resolvers]
 /// impl Events for EventsImpl { }
 ///
 /// #[tokio::main]
 /// async fn main() {
+///   # let context: Context<Wry> = generate_context!("../example/src-tauri/tauri.conf.json", test = true);
 ///   let router = Router::new()
 ///     .merge(ApiImpl.into_handler())
 ///     .merge(EventsImpl.into_handler());
 ///
 ///   tauri::Builder::default()
 ///     .invoke_handler(router.into_handler())
-///     .run(tauri::generate_context!())
+///     .run(context) // tauri::generate_context!()
 ///     .expect("error while running tauri application");
 /// }
 /// ```
@@ -247,14 +251,15 @@ impl<R: Runtime> Router<R> {
     /// `specta_typescript::Typescript` for all the configuration options.
     ///
     /// Example:
-    /// ```rust
-    ///    let router = Router::new()
-    ///        .export_config(
-    ///            specta_typescript::Typescript::default()
-    ///                .header("// My header\n")
-    ///                .bigint(specta_typescript::BigIntExportBehavior::String),
-    ///        )
-    ///        .merge(...);
+    /// ```
+    /// # use taurpc::Router;
+    /// #
+    /// let router = Router::new().export_config(
+    ///     specta_typescript::Typescript::default()
+    ///         .header("// My header\n")
+    ///         .bigint(specta_typescript::BigIntExportBehavior::String),
+    /// );
+    /// # let router: Router<tauri::Wry> = router;
     /// ```
     pub fn export_config(mut self, config: specta_typescript::Typescript) -> Self {
         self.export_config = config;
@@ -263,10 +268,36 @@ impl<R: Runtime> Router<R> {
 
     /// Add routes to the router, accepts a struct for which a `#[taurpc::procedures]` trait is implemented
     ///
-    /// ```rust
-    ///    let router = Router::new()
-    ///      .merge(ApiImpl.into_handler())
-    ///      .merge(EventsImpl.into_handler());
+    /// ```
+    /// # use taurpc::Router;
+    ///
+    /// # #[tokio::main]
+    /// # async fn main() {
+    /// #
+    /// # #[taurpc::procedures]
+    /// # trait Api { }
+    /// #
+    /// # #[derive(Clone)]
+    /// # struct ApiImpl;
+    /// #
+    /// # #[taurpc::resolvers]
+    /// # impl Api for ApiImpl { }
+    /// #
+    /// # #[taurpc::procedures(path = "events")]
+    /// # trait Events { }
+    /// #
+    /// # #[derive(Clone)]
+    /// # struct EventsImpl;
+    /// #
+    /// # #[taurpc::resolvers]
+    /// # impl Events for EventsImpl { }
+    /// #
+    /// let router = Router::new()
+    ///     .merge(ApiImpl.into_handler())
+    ///     .merge(EventsImpl.into_handler());
+    /// #
+    /// # let router: Router<tauri::Wry> = router;
+    /// # }
     /// ```
     pub fn merge<H: TauRpcHandler<R>>(mut self, handler: H) -> Self {
         if let Some(path) = H::EXPORT_PATH {
@@ -284,13 +315,16 @@ impl<R: Runtime> Router<R> {
         self
     }
 
-    /// Create a handler out of the router that allows your IPCs to be called from the frontend,
+    /// Create a handler out of the router that allows your IPCs to be called from the frontend
     /// and generate the corresponding types. Use this inside `.invoke_handler()` on the tauri::Builder.
     ///
-    /// ```rust
+    /// ```no_run
+    /// # use tauri::{generate_context, Context, Wry};
+    /// # let context: Context<Wry> = generate_context!("../example/src-tauri/tauri.conf.json", test = true);
+    /// # let router = taurpc::Router::new();
     ///    tauri::Builder::default()
     ///      .invoke_handler(router.into_handler())
-    ///      .run(tauri::generate_context!())
+    ///      .run(context) // tauri::generate_context!()
     ///      .expect("error while running tauri application");
     /// ```
     pub fn into_handler(self) -> impl Fn(Invoke<R>) -> bool {

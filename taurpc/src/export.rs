@@ -1,8 +1,8 @@
-use anyhow::{Context, Result, bail};
+use anyhow::{bail, Context, Result};
 use heck::ToLowerCamelCase;
 use itertools::Itertools;
-use specta::TypeCollection;
 use specta::datatype::{Function, FunctionResultVariant};
+use specta::TypeCollection;
 use specta_typescript as ts;
 use specta_typescript::Typescript;
 use std::collections::BTreeMap;
@@ -38,7 +38,7 @@ export {
 ///
 /// By default, if the `export_to` attribute was not specified on the procedures macro, it will be exported
 /// to `node_modules/.taurpc` and a `package.json` will also be generated to import the package.
-/// Otherwise the code will just be export to the .ts file specified by the user.
+/// Otherwise, the code will just be export to the .ts file specified by the user.
 pub(super) fn export_types(
     export_path: Option<&'static str>,
     args_map: BTreeMap<String, String>,
@@ -178,7 +178,7 @@ fn generate_function(
             .map(|ty| format!("{}: {}", name.to_lower_camel_case(), ty))
         })
         .collect::<Result<Vec<_>, _>>()
-        .context("An error occured while generating command args")?
+        .context("An error occurred while generating command args")?
         .join(", ");
 
     let return_ty = match function.result() {

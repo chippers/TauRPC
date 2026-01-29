@@ -1,10 +1,10 @@
 use generator::ProceduresGenerator;
 use proc::{IpcMethod, Procedures};
 use proc_macro::{self, TokenStream};
-use quote::{ToTokens, format_ident, quote};
+use quote::{format_ident, quote, ToTokens};
 use syn::{
-    Ident, ImplItem, ImplItemFn, ImplItemType, ItemImpl, ItemStruct, ReturnType, Type,
-    parse_macro_input, parse_quote, parse_quote_spanned, spanned::Spanned,
+    parse_macro_input, parse_quote, parse_quote_spanned, spanned::Spanned, Ident, ImplItem,
+    ImplItemFn, ImplItemType, ItemImpl, ItemStruct, ReturnType, Type,
 };
 
 mod args;
@@ -100,10 +100,10 @@ pub fn resolvers(_attr: TokenStream, item: TokenStream) -> TokenStream {
     let mut types: Vec<ImplItemType> = Vec::new();
 
     for inner in &mut item.items {
-        if let ImplItem::Fn(method) = inner
-            && method.sig.asyncness.is_some()
-        {
-            types.push(transform_method(method));
+        if let ImplItem::Fn(method) = inner {
+            if method.sig.asyncness.is_some() {
+                types.push(transform_method(method));
+            }
         }
     }
 

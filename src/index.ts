@@ -108,7 +108,7 @@ const nestedProxy = (
             return async (listener: (args: unknown) => void) => {
               return await listen(
                 TAURPC_EVENT_NAME,
-                createEventHandlder(event_name, listener, args_map),
+                createEventHandler(event_name, listener, args_map),
               )
             }
           },
@@ -162,7 +162,7 @@ const handleProxyCall = async (
   return response
 }
 
-const createEventHandlder = (
+const createEventHandler = (
   event_name: string,
   listener: ListenFn,
   args_map: ArgsMap[string],

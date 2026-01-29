@@ -2,7 +2,7 @@
 name = "taurpc"
 authors = ["MatsDK","johncarmack1984"]
 version = "0.5.2"
-edition = "2024"
+edition = "2021"
 description = "A type-safe IPC layer for tauri commands"
 documentation = "https://docs.rs/taurpc"
 homepage = "https://github.com/fltsci/TauRPC"
@@ -10,6 +10,7 @@ repository = "https://github.com/fltsci/TauRPC"
 license = "MIT OR Apache-2.0"
 readme = "../README.md"
 categories = []
+rust-version = "1.77.2"
 
 [package.metadata."docs.rs"]
 all-features = true
@@ -19,17 +20,23 @@ rustdoc-args = ["--cfg", "docsrs"]
 [dependencies]
 taurpc-macros = { path = "./taurpc-macros", version = "=0.5.2" }
 
-itertools = "0.14.0"
-tauri = { version = "2.9.3", features = ["specta"] }
-serde = { version = "1.0.228", features = ["derive"] }
-serde_json = { version = "1.0.145", features = ["preserve_order"] }
-tokio = { version = "1.48.0", features = ["full"] }
+itertools = "0.14"
+tauri = { version = "2.9", features = ["specta"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = { version = "1", features = ["preserve_order"] }
+tokio = { version = "1", features = ["full"] }
 
-specta = { version = "=2.0.0-rc.22", features = ["export", "function"] }
+specta = { version = "=2.0.0-rc.22", features=["export", "function"] }
 specta-serde = { version = "0.0.9", features = [] }
 specta-typescript = { version = "0.0.9", features = ["function"] }
-heck = "0.5.0"
-anyhow = "1.0.100"
+heck = "0.5"
+anyhow = "1"
+
+[dev-dependencies]
+tauri = { version = "2", features = ["specta", "test"] }
 
 [workspace]
-members = ["taurpc-macros"]
+resolver = "3"
+members = [
+  "taurpc-macros",
+]

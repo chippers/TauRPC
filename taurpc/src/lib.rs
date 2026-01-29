@@ -118,7 +118,7 @@ struct Event<S> {
 }
 
 /// A structure used for triggering [tauri events](https://v2.tauri.app/develop/calling-rust/#accessing-the-webviewwindow-in-commands) on the frontend.
-/// By default, the events are send to all windows with `emit_all`, if you want to send to a specific window by label,
+/// By default, the events are sent to all windows with `emit_all`, if you want to send to a specific window by label,
 /// use `new_scoped` or `new_scoped_from_trigger`.
 #[derive(Debug)]
 pub struct EventTrigger<RT: Runtime> {
@@ -182,7 +182,7 @@ impl<RT: Runtime> EventTrigger<RT> {
 
 /// Used for merging nested trait implementations. This is used when you have multiple trait implementations,
 /// instead of `taurpc::create_ipc_handler()`. Use `.merge()` to add trait implementations to the router.
-/// The trait must have the `#[taurpc::procedures]` macro and the nested routes should have `#[taurpc::procedures(path = "path")]`.
+/// The trait must have the `#[taurpc::procedures]` macro, and the nested routes should have `#[taurpc::procedures(path = "path")]`.
 ///
 ///  # Examples
 /// ```rust
@@ -279,7 +279,7 @@ impl<R: Runtime> Router<R> {
         self
     }
 
-    /// Create a handler out of the router that allows your IPCs to be called from the frontend,
+    /// Create a handler out of the router that allows your IPCs to be called from the frontend
     /// and generate the corresponding types. Use this inside `.invoke_handler()` on the tauri::Builder.
     ///
     /// ```rust

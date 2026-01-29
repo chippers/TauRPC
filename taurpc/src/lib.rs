@@ -249,12 +249,11 @@ impl<R: Runtime> Router<R> {
     /// ```
     /// # use taurpc::Router;
     /// #
-    ///    let router = Router::new()
-    ///        .export_config(
-    ///            specta_typescript::Typescript::default()
-    ///                .header("// My header\n")
-    ///                .bigint(specta_typescript::BigIntExportBehavior::String),
-    ///        );
+    /// let router = Router::new().export_config(
+    ///     specta_typescript::Typescript::default()
+    ///         .header("// My header\n")
+    ///         .bigint(specta_typescript::BigIntExportBehavior::String),
+    /// );
     /// # let router: Router<tauri::Wry> = router;
     /// ```
     pub fn export_config(mut self, config: specta_typescript::Typescript) -> Self {

@@ -1,6 +1,6 @@
 [package]
 name = "taurpc"
-authors = ["MatsDK","johncarmack1984"]
+authors = ["MatsDK", "johncarmack1984"]
 version = "0.5.2"
 edition = "2021"
 description = "A type-safe IPC layer for tauri commands"
@@ -26,7 +26,7 @@ serde = { version = "1", features = ["derive"] }
 serde_json = { version = "1", features = ["preserve_order"] }
 tokio = { version = "1", features = ["full"] }
 
-specta = { version = "=2.0.0-rc.22", features=["export", "function"] }
+specta = { version = "=2.0.0-rc.22", features = ["export", "function"] }
 specta-serde = { version = "0.0.9", features = [] }
 specta-typescript = { version = "0.0.9", features = ["function"] }
 heck = "0.5"
@@ -37,6 +37,4 @@ tauri = { version = "2", features = ["specta", "test"] }
 
 [workspace]
 resolver = "3"
-members = [
-  "taurpc-macros",
-]
+members = ["taurpc-macros"]

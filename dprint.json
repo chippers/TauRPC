@@ -8,7 +8,7 @@
   "exec": {
     "associations": "**/*.{rs}",
     "commands": [{
-      "command": "rustfmt --edition 2024",
+      "command": "rustfmt --edition 2021",
       "exts": ["rs"]
     }]
   },
@@ -27,6 +27,6 @@
     "https://plugins.dprint.dev/typescript-0.85.1.wasm",
     "https://plugins.dprint.dev/json-0.17.4.wasm",
     "https://plugins.dprint.dev/markdown-0.15.3.wasm",
-    "https://plugins.dprint.dev/exec-0.4.3.json@42343548b8022c99b1d750be6b894fe6b6c7ee25f72ae9f9082226dd2e515072"
+    "https://plugins.dprint.dev/exec-0.6.0.json@a054130d458f124f9b5c91484833828950723a5af3f8ff2bd1523bd47b83b364"
   ]
 }
